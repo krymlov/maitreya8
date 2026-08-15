@@ -527,7 +527,9 @@ bool FileDataSet::readAtxFile()
 
 	buf = theFile.GetNextLine();
 	timeZone = myatof( buf );
-	if (( timeZone < -12 ) || ( timeZone > 12 ))
+
+	// fix 8.2: New Sealand has tz 13
+	if (( timeZone < -13 ) || ( timeZone > 13 ))
 	{
 		wxLogError( wxT( "Invalid time zone value %f in file %s." ), timeZone, filename.c_str() );
 		return false;
@@ -662,7 +664,9 @@ bool FileDataSet::readMtxFile()
 
 	buf = theFile.GetNextLine();
 	timeZone = myatof( buf );
-	if (( timeZone < -12 ) || ( timeZone > 12 ))
+
+	// fix 8.2: New Sealand has tz 13
+	if (( timeZone < -13 ) || ( timeZone > 13 ))
 	{
 		wxLogError( wxT( "Invalid time zone value %f in file %s." ), timeZone, filename.c_str() );
 		return false;

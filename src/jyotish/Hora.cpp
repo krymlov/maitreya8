@@ -68,25 +68,26 @@ void HoraExpert::update( const double &jd )
 
 	int i, weekday, day, month, year;
 
-	double sunrise = calculator->calcNextSolarEvent( SOLAR_EVENT_SUNRISE, jd, location->getLatitude(), location->getLongitude());
-	double sunset = calculator->calcNextSolarEvent( SOLAR_EVENT_SUNSET, sunrise, location->getLatitude(), location->getLongitude());
-	double sunrise_next = calculator->calcNextSolarEvent( SOLAR_EVENT_SUNRISE, sunset, location->getLatitude(), location->getLongitude());
+	DataSet ds( *location );
+	ds.setDate( jd );
+
+	const double sunrise = calculator->calcNextSolarEvent( SOLAR_EVENT_SUNRISE, jd - 1, location->getLatitude(), location->getLongitude());
+	const double sunset = calculator->calcNextSolarEvent( SOLAR_EVENT_SUNSET, sunrise, location->getLatitude(), location->getLongitude());
+	const double sunrise_next = calculator->calcNextSolarEvent( SOLAR_EVENT_SUNRISE, sunset, location->getLatitude(), location->getLongitude());
 
 	weekday = getWeekDay( sunrise );
 	dinaLord = lordseq[ ( rev_lordseq[weekday] ) % 7 ];
-
-
 
 #ifdef HORA_DEB
 	wxString s;
 	printf( "##################  DEBUG ######################\n" );
 	location->dump( s );
-	s = formatter->getFullDateStringFromJD( jd );
-	printf( "full date: %s\n", str2char( s ));
-	printf( "jd: %s\n", str2char( formatter->getFullDateStringFromJD( jd )));
-	printf( "sunrise: %s\n", str2char( formatter->getFullDateStringFromJD( sunrise )));
-	printf( "sunset: %s\n", str2char( formatter->getFullDateStringFromJD( sunset )));
-	printf( "sunrise NEXT: %s\n", str2char( formatter->getFullDateStringFromJD( sunrise_next )));
+	printf( "%s\n", str2char( s ));
+	printf( "full date: %s\n", str2char( formatter->formatFullDateString( jd )));
+	printf( "jd: %s\n", str2char( formatter->formatFullDateString( jd )));
+	printf( "sunrise: %s\n", str2char( formatter->formatFullDateString( sunrise )));
+	printf( "sunset: %s\n", str2char( formatter->formatFullDateString( sunset )));
+	printf( "sunrise NEXT: %s\n", str2char( formatter->formatFullDateString( sunrise_next )));
 	printf( "WEEKDAY %d\n", weekday );
 	printf( "dinalord %d\n", dinaLord );
 	printf( "##################  END DEBUG  ######################\n" );

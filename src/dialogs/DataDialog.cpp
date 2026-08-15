@@ -117,7 +117,7 @@ DataDialog::DataDialog( wxWindow* parent, Document *d )
     button_defloc = new wxButton(this, DD_DEFLOC, _("Standard Location"));
     button_searchloc = new wxButton(this, DD_SEARCHLOC, _("Search Location"));
     label_tz = new wxStaticText(this, wxID_ANY, _("Time Zone"));
-    text_tz = new MDegSpin(this, wxID_ANY, 12);
+    text_tz = new MDegSpin(this, wxID_ANY, 13);
     label_tzfmt = new wxStaticText(this, wxID_ANY, _("HH:MM[:SS]"));
     const wxString choice_tzew_choices[] = {
         _("East"),
@@ -149,7 +149,7 @@ DataDialog::DataDialog( wxWindow* parent, Document *d )
 	text_latitude->SetValidator( MDegreeValidator( &model->latitude, 90 ));
 	choice_ns->SetValidator( MChoiceValidator( &model->c_latitude ));
 
-	text_tz->SetValidator( MDegreeValidator( &model->tz, 12 ));
+	text_tz->SetValidator( MDegreeValidator( &model->tz, 13 ));
 	choice_tzew->SetValidator( MChoiceValidator( &model->c_tz ));
 
 	text_dst->SetValidator( MDegreeValidator( &model->dst, 12 ));

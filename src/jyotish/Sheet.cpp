@@ -319,10 +319,16 @@ void MString::add( const MString &f )
 	}
 }
 
-// TODO maybe wrong in Ansi build
+// fix 8.2: symbols in PDF were question marks
+#ifdef __WXMSW__
+#define DEGREE_SYMBOL wxT( "°" );
+#define MINUTE_SYMBOL wxT( "'" )
+#define SECOND_SYMBOL wxT( "\"" )
+#else
 #define DEGREE_SYMBOL wxT( "\u00B0" );
 #define MINUTE_SYMBOL wxT( "\u2032" )
 #define SECOND_SYMBOL wxT( "\u2033" )
+#endif
 
 /*****************************************************
 **
@@ -378,7 +384,7 @@ MString SheetFormatter::getPosFormatted( const double &len, const MOVING_DIRECTI
 		if ( precision == DEG_PRECISION_MINUTE )
 		{
 			t.add( MToken( sdeg ));
-			t.add( MToken( TTSE_SIGN, sign, format ));
+			t.add( MToken( TTSE_SIGN, sign, format, writercfg->vedicSignNames ));
 			t.add( MToken( smin ));
 		}
 		else
@@ -395,7 +401,7 @@ MString SheetFormatter::getPosFormatted( const double &len, const MOVING_DIRECTI
 			}
 			s << SPACE;
 			t.add( MToken( s ));
-			t.add( MToken( TTSE_SIGN, sign, format ));
+			t.add( MToken( TTSE_SIGN, sign, format, writercfg->vedicSignNames ));
 		}
 	}
 
@@ -501,7 +507,6 @@ wxString SheetFormatter::token2PlainText( const MToken &token )
 	{
 		t << token.text;
 	}
-	//printf( "KUNO %s\n", str2char( t ));
 	return t;
 }
 
@@ -512,7 +517,7 @@ wxString SheetFormatter::token2PlainText( const MToken &token )
 ******************************************************/
 wxString SheetFormatter::token2Html( const MToken &token )
 {
-	Lang lang;
+	Lang lang( writercfg );
 	wxString t;
 	SymbolProvider sp( writercfg );
 
@@ -541,7 +546,7 @@ wxString SheetFormatter::token2Html( const MToken &token )
 				}
 				else
 				{
-					t << lang.getSignName( (Rasi)token.entityId, token.textFormat ); // TODO, writercfg->vedicSignNames );
+					t << lang.getSignName( (Rasi)token.entityId, token.textFormat );
 				}
 			break;
 			case TTSE_DIRECTION:
